@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @SpringBootApplication
@@ -203,5 +204,24 @@ public class BibliothequeController {
             return "L'étudiant " + numEtudiant + " a bien été modifié.";
         }
         return "L'étudiant " + numEtudiant + " n'est pas inscrit dans la bibliothèque.";
+    }
+
+    @PutMapping("/modifier/json/livre")
+    public String modifierLivreJSON(@RequestBody Map<String, Object> body) {
+        String isbn = (String) body.get("isbn");
+        Livre livre = this.bibliotheque.getLivreByIsbn(isbn);
+        if(livre == null)
+            return "Le livre " + isbn + " n'existe pas dans la bibliothèque.";
+
+        if(body.containsKey("titre"))
+            livre.setTitre((String) body.get("titre"));
+        if(body.containsKey("auteur"))
+            livre.setAuteur((String) body.get("auteur"));
+        if(body.containsKey("annee"))
+            livre.setAnnee(String.valueOf(body.get("annee")));
+        if(body.containsKey("categorie"))
+            livre.setCategorie(Categorie.valueOf((String) body.get("categorie")));
+
+        return "Le livre " + isbn + " a bien été modifié.";
     }
 }
