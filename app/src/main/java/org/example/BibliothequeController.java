@@ -224,4 +224,21 @@ public class BibliothequeController {
 
         return "Le livre " + isbn + " a bien été modifié.";
     }
+
+    @PutMapping("modifier/json/etudiant")
+    public String modifierEtudiantJSON(@RequestBody Map<String, Object> body) {
+        String numEtudiant = (String) body.get("numEtudiant");
+        Etudiant etudiant = this.bibliotheque.getEtudiantByNumEtudiant(numEtudiant);
+
+        if(etudiant == null)
+            return "L'étudiant " + numEtudiant + " n'est pas inscrit dans la biliothèque.";
+
+        if(body.containsKey("nom"))
+            etudiant.setNom((String) body.get("nom"));
+        if(body.containsKey("prenom"))
+            etudiant.setPrenom((String) body.get("prenom"));
+        if(body.containsKey("email"))
+            etudiant.setEmail((String) body.get("email"));
+        return "L'étudiant " + numEtudiant + " a bien été modifié.";
+    }
 }
